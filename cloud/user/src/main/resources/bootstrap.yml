@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 162.14.102.130:8848
+        namespace: ${NACOS_NAMESPACE:b03e95c1-ad10-46e9-8ae9-7d4360fb7e6a}
+      config:
+        server-addr: 162.14.102.130:8848
+        namespace: ${NACOS_NAMESPACE:b03e95c1-ad10-46e9-8ae9-7d4360fb7e6a}
+        file-extension: yml

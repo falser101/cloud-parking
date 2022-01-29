@@ -6,7 +6,6 @@
         <artifactId>cloud</artifactId>
         <groupId>com.falser</groupId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
     </parent>
     <groupId>com.falser.cloud</groupId>
     <artifactId>parking</artifactId>

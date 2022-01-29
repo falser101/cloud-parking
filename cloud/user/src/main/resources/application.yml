@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: user
+  profiles:
+    active: dev
+  redis:
+    host: r-2vcejjs6xman4kgqenpd.redis.cn-chengdu.rds.aliyuncs.com
+    port: 6379
+    password: 7126034ZjH+
+    database: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: 1ms
+        min-idle: 0
+server:
+  port: 8000
+
+

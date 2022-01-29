@@ -10,7 +10,6 @@ public enum PermissionTypeEnum {
     CONTENTS("目录", 1),
     MENU("菜单", 2),
     BUTTON("按钮", 3),
-    INTERFACE("接口", 4),
     ;
 
 
