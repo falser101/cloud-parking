@@ -22,9 +22,6 @@ public class RoleDetailDTO {
     @ApiModelProperty("角色key")
     private String roleKey;
 
-    @ApiModelProperty("菜单列表")
-    private List<Long> menuList;
-
-    @ApiModelProperty("接口列表")
-    private List<Long> interfaceList;
+    @ApiModelProperty("权限列表")
+    private List<Long> permList;
 }

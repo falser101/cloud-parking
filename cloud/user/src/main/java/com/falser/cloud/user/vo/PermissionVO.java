@@ -15,8 +15,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PermissionVO extends Page{
-    private String permissionName;
+    private String routerName;
     private String perms;
-    @ApiModelProperty("权限类型")
-    private PermissionTypeEnum permissionType;
 }

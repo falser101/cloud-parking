@@ -1,5 +1,6 @@
 package com.falser.cloud.user.dto;
 
+import com.falser.cloud.common.enums.PermissionTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -17,14 +18,14 @@ public class MenuTree {
     @ApiModelProperty("id")
     private Long id;
 
-    @ApiModelProperty("权限名")
-    private String permissionName;
+    @ApiModelProperty("路由名")
+    private String routerName;
 
     @ApiModelProperty("父级id")
     private Long parentId;
 
     @ApiModelProperty("权限类型")
-    private String permissionType;
+    private PermissionTypeEnum permissionType;
 
     @ApiModelProperty("权限key")
     private String perms;
@@ -40,15 +41,6 @@ public class MenuTree {
 
     @ApiModelProperty("更新时间")
     private LocalDateTime updateTime;
-
-    @ApiModelProperty("图标")
-    private String icon;
-
-    @ApiModelProperty("请求地址")
-    private String url;
-
-    @ApiModelProperty("方法")
-    private String method;
 
     @ApiModelProperty("children")
     private List<MenuTree> children;

@@ -20,7 +20,7 @@ public class UserInfoDTO implements Serializable {
 
     private UserInfo userInfo;
 
-    private String role;
+    private List<String> roles;
 
     private List<ContentDTO> contents;
 }

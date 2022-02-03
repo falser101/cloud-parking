@@ -12,8 +12,11 @@ import com.falser.cloud.common.enums.StatusEnum;
 import com.falser.cloud.common.exception.BaseException;
 import com.falser.cloud.user.dto.LoginSuccessDTO;
 import com.falser.cloud.user.entity.SysPermission;
+import com.falser.cloud.user.entity.SysRole;
 import com.falser.cloud.user.entity.SysUser;
+import com.falser.cloud.user.entity.SysUserRole;
 import com.falser.cloud.user.service.AuthService;
+import com.falser.cloud.user.service.SysRoleService;
 import com.falser.cloud.user.service.SysUserRoleService;
 import com.falser.cloud.user.service.SysUserService;
 import com.falser.cloud.user.vo.LoginVO;
@@ -24,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,10 +45,13 @@ public class AuthServiceImpl implements AuthService {
 
     private final SysUserRoleService sysUserRoleService;
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder, SysUserService sysUserService, SysUserRoleService sysUserRoleService) {
+    private final SysRoleService sysRoleService;
+
+    public AuthServiceImpl(PasswordEncoder passwordEncoder, SysUserService sysUserService, SysUserRoleService sysUserRoleService, SysRoleService sysRoleService) {
         this.passwordEncoder = passwordEncoder;
         this.sysUserService = sysUserService;
         this.sysUserRoleService = sysUserRoleService;
+        this.sysRoleService = sysRoleService;
     }
 
     @Override
@@ -67,8 +70,9 @@ public class AuthServiceImpl implements AuthService {
                         .setToken(StpUtil.getTokenValue())
                         .setTokenKey(StpUtil.getTokenName());
             }
+            throw new BaseException(RequestStatus.USERNAME_PASSWORD_ERROR);
         }
-        throw new BaseException(RequestStatus.USERNAME_PASSWORD_ERROR);
+        throw new BaseException(RequestStatus.USER_NOT_REGISTER_ERROR);
     }
 
     @Override
@@ -80,10 +84,29 @@ public class AuthServiceImpl implements AuthService {
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(sysUser, userInfo);
         userInfoDTO.setUserInfo(userInfo);
+
+        // 角色信息
+        SysRole sysRole = getSysRole(userId);
+        userInfoDTO.setRoles(List.of(Optional.ofNullable(sysRole)
+                .orElse(SysRole.builder().roleKey("visitor").build())
+                .getRoleKey()));
+
         // 权限信息
         List<ContentDTO> contents = getContentDTOS(userId);
         userInfoDTO.setContents(contents);
         return userInfoDTO;
+    }
+
+    /**
+     * 获取用户角色
+     *
+     * @param userId 用户id
+     * @return {@link SysRole}
+     */
+    private SysRole getSysRole(Long userId) {
+        SysUserRole one = sysUserRoleService.getOne(new LambdaQueryWrapper<SysUserRole>()
+                .eq(SysUserRole::getUserId, userId));
+        return sysRoleService.getById(one.getRoleId());
     }
 
     /**
@@ -94,7 +117,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private List<ContentDTO> getContentDTOS(Long userId) {
         List<SysPermission> permissionList = sysUserRoleService.getPermissionListByUserId(userId);
-        if(CollectionUtils.isEmpty(permissionList)){
+        if (CollectionUtils.isEmpty(permissionList)) {
             return Collections.emptyList();
         }
         Map<PermissionTypeEnum, List<SysPermission>> permMap = permissionList.stream()
@@ -103,15 +126,15 @@ public class AuthServiceImpl implements AuthService {
         List<SysPermission> menus = permMap.getOrDefault(PermissionTypeEnum.MENU, Collections.emptyList());
         List<SysPermission> buttons = permMap.getOrDefault(PermissionTypeEnum.BUTTON, Collections.emptyList());
 
-        List<ContentDTO> contents = permMap.getOrDefault(PermissionTypeEnum.CONTENTS, Collections.emptyList())
-                .stream().map(content -> {
+        return permMap.getOrDefault(PermissionTypeEnum.CONTENTS, Collections.emptyList())
+                .stream()
+                .map(content -> {
                     ContentDTO contentDTO = new ContentDTO();
                     BeanUtils.copyProperties(content, contentDTO);
                     List<ContentDTO.MenuDTO> menuDTOS = dealMenus(menus, buttons, content);
                     contentDTO.setMenus(menuDTOS);
                     return contentDTO;
                 }).collect(Collectors.toList());
-        return contents;
     }
 
     /**

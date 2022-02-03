@@ -66,34 +66,31 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/system/permission',
     name: 'system',
-    meta: {
-      title: '系统管理',
-      icon: 'nested'
-    },
+    meta: {title: '系统管理', icon: 'system'},
     children: [
       {
         path: 'permission',
         component: () => import('@/views/system/permission/index'),
         name: 'permission',
-        meta: {title: '权限管理'}
+        meta: {title: '权限管理', icon: 'clipboard'}
       },
       {
         path: 'role',
         component: () => import('@/views/system/role/index'),
         name: 'role',
-        meta: {title: '角色管理'}
+        meta: {title: '角色管理', icon: 'peoples'}
       },
       {
         path: 'user',
         component: () => import('@/views/system/user/index'),
         name: 'user',
-        meta: {title: '用户管理'}
+        meta: {title: '用户管理', icon: 'user'}
       },
       {
         path: 'dataDict',
         component: () => import('@/views/system/data_dict/index'),
         name: 'dataDict',
-        meta: {title: '数据字典'}
+        meta: {title: '数据字典', icon: 'dict'}
       }
     ]
   },
@@ -103,39 +100,37 @@ export const asyncRoutes = [
     redirect: '/parking/member',
     name: 'parking',
     meta: {
-      title: '会员中心',
-      icon: ''
-    },
+      title: '智能停车场', icon: 'dashboard'},
     children: [
       {
         path: 'member',
         component: () => import('@/views/member/member/index'),
         name: 'member',
-        meta: {title: '会员管理'}
+        meta: {title: '会员管理', icon: 'user'}
       },
       {
-        path: 'parking_space',
+        path: 'space',
         component: () => import('@/views/member/parking_space/index'),
-        name: 'parking_space',
-        meta: {title: '停车位管理'}
+        name: 'space',
+        meta: {title: '停车位管理', icon: 'row'}
       },
       {
         path: 'simulation',
         component: () => import('@/views/member/simulation/index'),
         name: 'simulation',
-        meta: {title: '模拟出入场'}
+        meta: {title: '模拟出入场', icon: 'drag'}
       },
       {
         path: 'accessInfo',
         component: () => import('@/views/member/accessInfo/index'),
         name: 'accessInfo',
-        meta: {title: '进出停车场信息'}
+        meta: {title: '进出停车场信息', icon: 'documentation'}
       },
       {
         path: 'order',
         component: () => import('@/views/member/order/index'),
         name: 'order',
-        meta: {title: '停车订单信息'}
+        meta: {title: '停车订单信息', icon: 'list'}
       }
     ]
   },

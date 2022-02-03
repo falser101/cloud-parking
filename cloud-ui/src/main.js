@@ -13,7 +13,8 @@ import store from './store'
 import router from './router'
 
 import '@/icons' // icon
-import '@/permission' // permission control
+import '@/permission'
+import directive from "@/directive"; // permission control
 
 /**
  * If you don't want to use mock-server
@@ -27,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
-
+Vue.use(directive)
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

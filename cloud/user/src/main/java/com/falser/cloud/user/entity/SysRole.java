@@ -6,7 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,6 +23,9 @@ import java.time.LocalDateTime;
  * @since 2022-01-29 00:51:06
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @TableName("sys_role")
 public class SysRole implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
