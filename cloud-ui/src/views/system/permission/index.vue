@@ -2,17 +2,17 @@
   <div class="app-container">
     <el-form ref="form" :inline="true" :model="form" label-width="120px">
       <el-form-item label="路由名称">
-        <el-input v-model="form.routerName"/>
+        <el-input v-model="form.routerName" />
       </el-form-item>
       <el-form-item label="权限key">
-        <el-input v-model="form.perms"/>
+        <el-input v-model="form.perms" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button @click="onCancel">重置</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-has-permi="['system:permission:add']" @click="addMenuOrInterface(0, '')">
+        <el-button v-has-permi="['system:permission:add']" type="primary" @click="addMenuOrInterface('0', '')">
           新增
         </el-button>
       </el-form-item>
@@ -72,30 +72,30 @@
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.permissionType !== 'BUTTON'"
+            v-has-permi="['system:permission:add']"
             size="mini"
             type="text"
             icon="el-icon-add"
-            v-has-permi="['system:permission:add']"
             @click="addMenuOrInterface(scope.row.id, scope.row.permissionType)"
           >新增
           </el-button>
           <el-button
+            v-has-permi="['system:permission:update']"
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-has-permi="['system:permission:update']"
           >修改
           </el-button>
           <el-popconfirm
-            @confirm="handleDelete(scope.row)"
             title="确定删除吗？"
+            @confirm="handleDelete(scope.row)"
           >
             <el-button
               slot="reference"
+              v-has-permi="['system:permission:remove']"
               size="mini"
               type="text"
-              v-has-permi="['system:permission:remove']"
             >删除
             </el-button>
           </el-popconfirm>
@@ -111,31 +111,33 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="父级路由" prop="parentId">
-              <el-select disabled v-model="form1.parentId" clearable placeholder="请选择">
+              <el-select v-model="form1.parentId" disabled clearable placeholder="请选择">
                 <el-option
                   key="0"
                   label="一级目录"
                   value="0"
-                >
-                </el-option>
+                />
                 <el-option
                   v-for="item in level1"
                   :key="item.id"
                   :label="item.routerName"
                   :value="item.id"
-                >
-                </el-option>
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form1.permissionType === '' || form1.permissionType === 'CONTENTS'" label="路由name" prop="routerName">
-              <el-input v-model="form1.routerName" placeholder="请输入名称"/>
+            <el-form-item
+              v-if="form1.permissionType === 'CONTENTS' || form1.permissionType === 'MENU'"
+              label="路由name"
+              prop="routerName"
+            >
+              <el-input v-model="form1.routerName" placeholder="请输入名称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form1.permissionType === 'MENU'" prop="perms" label="权限标识">
-              <el-input v-model="form1.perms" placeholder="请输入权限标识" maxlength="100"/>
+            <el-form-item v-if="form1.permissionType === 'BUTTON'" prop="perms" label="权限标识">
+              <el-input v-model="form1.perms" placeholder="请输入权限标识" maxlength="100" />
             </el-form-item>
           </el-col>
           <el-col :sapn="24">
@@ -165,7 +167,7 @@
 import IconSelect from '@/components/IconSelect'
 
 export default {
-  components: {IconSelect},
+  components: { IconSelect },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -188,16 +190,16 @@ export default {
       // 表单校验
       rules: {
         parentId: [
-          {required: true, message: '父级权限不能为空', trigger: 'blur'}
+          { required: true, message: '父级权限不能为空', trigger: 'blur' }
         ],
         permissionType: [
-          {required: true, message: '权限类型不能为空', trigger: 'blur'}
+          { required: true, message: '权限类型不能为空', trigger: 'blur' }
         ],
         routerName: [
-          {required: true, message: '前端路由name不能为空', trigger: 'blur'}
+          { required: true, message: '前端路由name不能为空', trigger: 'blur' }
         ],
         perms: [
-          {required: true, message: '权限字符不能为空', trigger: 'blur'}
+          { required: true, message: '权限字符不能为空', trigger: 'blur' }
         ]
       },
       // 弹出层标题
@@ -212,6 +214,7 @@ export default {
       total: 0,
       listLoading: true,
       form: {
+        permissionType: 'CONTENTS',
         routerName: undefined,
         perms: undefined,
         current: 1,
@@ -244,7 +247,7 @@ export default {
       this.$store.dispatch('dataDict/getDataDictLevel', {
         parentCode: parentCode
       }).then(data => {
-        const {childNodes} = data[0]
+        const { childNodes } = data[0]
         callback(childNodes)
       })
     },
@@ -276,7 +279,7 @@ export default {
     fetchData() {
       this.listLoading = true
       this.$store.dispatch('permission/getPermissionList', this.form).then(data => {
-        const {records, total, size, current} = data
+        const { records, total, size, current } = data
         this.list = records
         this.form.size = size
         this.form.current = current
@@ -290,32 +293,27 @@ export default {
     addMenuOrInterface(parentId, type) {
       this.isAdd = true
       this.form1 = {}
-      this.form1.permissionType = type
-      if (type === '') {
-        this.title = '新增目录'
-      }
-      if (type === 'CONTENTS') {
-        this.title = '新增菜单'
-      }
       switch (type) {
         case 'CONTENTS':
           this.title = '新增菜单'
+          this.form1.permissionType = 'MENU'
           break
         case 'MENU':
           this.title = '新增按钮'
-          break
-        case '':
+          this.form1.permissionType = 'BUTTON'
           break
         default:
+          this.form1.permissionType = 'CONTENTS'
+          this.form1.routerName = ''
           break
       }
-
-      if (parentId !== 0) {
-        this.form1.parentId = parentId
+      this.form1.parentId = parentId
+      if (type !== '') {
+        this.$store.dispatch('permission/getLevel1MenuOrInterface', type).then(data => {
+          this.level1 = data
+        })
       }
-      this.$store.dispatch('permission/getLevel1MenuOrInterface', this.form1.permissionType).then(data => {
-        this.level1 = data
-      })
+
       this.open = true
       this.formLoading = false
     },
@@ -359,7 +357,7 @@ export default {
       })
     },
     /** 提交按钮 */
-    submitForm: function () {
+    submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {

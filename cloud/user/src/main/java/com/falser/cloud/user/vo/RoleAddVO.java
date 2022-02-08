@@ -25,8 +25,4 @@ public class RoleAddVO {
     @ApiModelProperty("菜单列表")
     @NotEmpty(message = "菜单列表不能为空")
     private List<Long> menuList;
-
-    @ApiModelProperty("接口列表")
-    @NotEmpty(message = "接口列表不能为空")
-    private List<Long> interfaceList;
 }

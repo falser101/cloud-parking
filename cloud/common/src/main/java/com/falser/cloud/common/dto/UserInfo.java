@@ -2,6 +2,7 @@ package com.falser.cloud.common.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  * @date 2022/01/29 17:42:03
  */
 @Data
-public class UserInfo {
+public class UserInfo implements Serializable {
     private String loginName;
 
     private String username;

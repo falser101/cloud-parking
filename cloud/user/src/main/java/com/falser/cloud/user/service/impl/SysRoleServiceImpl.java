@@ -71,7 +71,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         SysRole entity = new SysRole();
         BeanUtils.copyProperties(vo, entity, "interfaceList", "menuList");
         save(entity);
-        List<SysRolePermission> sysRolePermissions = getRolePermissions(vo.getInterfaceList(), vo.getMenuList(), entity.getId());
+        List<SysRolePermission> sysRolePermissions = getRolePermissions(List.of(), vo.getMenuList(), entity.getId());
         sysRolePermissionService.saveBatch(sysRolePermissions);
     }
 

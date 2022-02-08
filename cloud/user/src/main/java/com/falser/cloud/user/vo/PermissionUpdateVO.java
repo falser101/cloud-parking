@@ -25,22 +25,10 @@ public class PermissionUpdateVO {
 
     @NotNull(message = "权限名不能为空")
     @ApiModelProperty("权限名")
-    private String permissionName;
-
-    @ApiModelProperty("id")
-    private String icon;
+    private String routerName;
 
     @ApiModelProperty("权限标识符")
     private String perms;
-
-    @ApiModelProperty("method")
-    private String method;
-
-    @ApiModelProperty("orderNum")
-    private Integer orderNum;
-
-    @ApiModelProperty("url")
-    private String url;
 
     @ApiModelProperty("父权限目录id")
     private Long parentId;

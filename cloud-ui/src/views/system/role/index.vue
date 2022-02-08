@@ -10,7 +10,7 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button @click="onCancel">重置</el-button>
-        <el-button @click="handleAdd">新增</el-button>
+        <el-button v-has-permi="['system:role:add']" @click="handleAdd">新增</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -70,6 +70,7 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
+            v-has-permi="['system:role:update']"
             @click="handleUpdate(scope.row)"
           >修改
           </el-button>
@@ -82,6 +83,7 @@
               slot="reference"
               size="mini"
               type="text"
+              v-has-permi="['system:role:remove']"
               icon="el-icon-delete"
             >删除
             </el-button>

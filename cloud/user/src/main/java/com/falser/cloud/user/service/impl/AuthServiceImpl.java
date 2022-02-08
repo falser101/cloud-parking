@@ -94,6 +94,7 @@ public class AuthServiceImpl implements AuthService {
         // 权限信息
         List<ContentDTO> contents = getContentDTOS(userId);
         userInfoDTO.setContents(contents);
+        StpUtil.getSession().set("userinfo", userInfoDTO);
         return userInfoDTO;
     }
 

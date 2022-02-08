@@ -39,7 +39,7 @@ module.exports = {
         pathRewrite: {
           '^/': '/'
         }
-      },
+      }
     },
     port: port,
     open: true,
