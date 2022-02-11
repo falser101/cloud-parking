@@ -253,15 +253,14 @@ export default {
     },
     /** 修改权限 */
     updatePermission() {
-      this.form1.permissionType = this.form.permissionType
       this.$refs['form1'].validate((valid) => {
         if (valid) {
           if (this.isAdd) {
-            this.$store.dispatch('permission/addPermission', this.form1).then(data => {
+            this.$store.dispatch('permission/addPermission', this.form1).then(() => {
               this.open = false
             })
           } else {
-            this.$store.dispatch('permission/updatePermission', this.form1).then(data => {
+            this.$store.dispatch('permission/updatePermission', this.form1).then(() => {
               this.open = false
             })
           }
@@ -379,7 +378,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       // return delMenu(row.menuId)
-      this.$store.dispatch('permission/delPermissionById', row.id).then(data => {
+      this.$store.dispatch('permission/delPermissionById', row.id).then(() => {
         this.fetchData()
       })
     },

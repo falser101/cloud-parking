@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
  */
 @Data
 public class UserInfo implements Serializable {
+    private Long serialVersionUID = 2752045484643811986L;
+
     private String loginName;
 
     private String username;

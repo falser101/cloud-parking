@@ -64,6 +64,12 @@ public class SysPermissionController {
         return ApiResponse.ofSuccess();
     }
 
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除单个数据")
+    public ApiResponse<Boolean> deleteOne(@PathVariable String id) {
+        return ApiResponse.ofSuccess(this.sysPermissionService.removeById(id));
+    }
+
     @DeleteMapping
     @ApiOperation("删除数据")
     public ApiResponse<Boolean> delete(@RequestParam("idList") List<Long> idList) {
