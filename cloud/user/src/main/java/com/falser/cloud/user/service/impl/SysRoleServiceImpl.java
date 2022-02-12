@@ -36,7 +36,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     @Override
     public RoleDetailDTO getRoleDetailById(Long id) {
         SysRole byId = getById(id);
-        List<Long> menuList = sysRolePermissionService.getPermissionIdsByRoleIdAndType(id, PermissionTypeEnum.MENU);
+        List<Long> menuList = sysRolePermissionService.getPermissionIdsByRoleId(id);
 
         RoleDetailDTO roleDetailDTO = new RoleDetailDTO();
         BeanUtils.copyProperties(byId, roleDetailDTO);

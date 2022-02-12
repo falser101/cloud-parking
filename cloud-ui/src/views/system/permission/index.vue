@@ -33,6 +33,11 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
+      <el-table-column label="权限名">
+        <template slot-scope="scope">
+          {{ scope.row.permName }}
+        </template>
+      </el-table-column>
       <el-table-column label="路由name">
         <template slot-scope="scope">
           {{ scope.row.routerName }}
@@ -113,9 +118,9 @@
             <el-form-item label="父级路由" prop="parentId">
               <el-select v-model="form1.parentId" disabled clearable placeholder="请选择">
                 <el-option
-                  key="0"
+                  :key="0"
                   label="一级目录"
-                  value="0"
+                  :value="0"
                 />
                 <el-option
                   v-for="item in level1"
@@ -127,12 +132,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item prop="permName" label="权限名">
+              <el-input v-model="form1.permName" placeholder="请输入权限名" maxlength="100" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item
               v-if="form1.permissionType === 'CONTENTS' || form1.permissionType === 'MENU'"
               label="路由name"
               prop="routerName"
             >
-              <el-input v-model="form1.routerName" placeholder="请输入名称" />
+              <el-input v-model="form1.routerName" placeholder="请输入路由name" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -200,6 +210,9 @@ export default {
         ],
         perms: [
           { required: true, message: '权限字符不能为空', trigger: 'blur' }
+        ],
+        permName: [
+          { required: true, message: '权限名不能为空', trigger: 'blur' }
         ]
       },
       // 弹出层标题
@@ -336,19 +349,12 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset()
-      this.loadDataDict('METHOD', data => {
-        this.options = data
-      })
+      this.title = '修改'
       this.open = true
       this.formLoading = true
       this.isAdd = false
-      this.title = this.form1.permissionType === 'MENU' ? '修改菜单' : '修改接口'
       this.$store.dispatch('permission/getPermissionById', row.id).then(data => {
         this.form1 = data
-        if (this.form1.parentId === 0) {
-          this.form1.parentId = undefined
-        }
         this.formLoading = false
       })
       this.$store.dispatch('permission/getLevel1MenuOrInterface', this.form.permissionType).then(data => {
@@ -387,14 +393,7 @@ export default {
       this.form1 = {
         id: undefined,
         parentId: '',
-        permissionName: undefined,
-        icon: undefined,
         permissionType: 'MENU',
-        orderNum: undefined,
-        visible: '0',
-        status: '0',
-        method: undefined,
-        remark: undefined
       }
     }
   }

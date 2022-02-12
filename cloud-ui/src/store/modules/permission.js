@@ -57,7 +57,7 @@ const mutations = {
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions
-  },
+  }
 
 }
 
@@ -98,17 +98,12 @@ const actions = {
   // 添加
   addPermission({ commit }, permission) {
     return new Promise((resolve, reject) => {
-      const { parentId, permissionType, permissionName, icon, perms, method, orderNum, url, remark } = permission
+      const { parentId, permissionType, permName, perms } = permission
       const form = {
-        parentId: parentId === undefined ? 0 : parentId,
+        parentId: parentId,
         permissionType: permissionType,
-        permissionName: permissionName,
-        icon: icon,
-        perms: perms,
-        method: method,
-        orderNum: orderNum,
-        url: url,
-        remark: remark
+        permName: permName,
+        perms: perms
       }
       addPermission(form).then(response => {
         const { data } = response
@@ -122,18 +117,14 @@ const actions = {
   // 修改权限
   updatePermission({ commit }, permission) {
     return new Promise((resolve, reject) => {
-      const { id, parentId, permissionType, permissionName, icon, perms, method, orderNum, url, remark } = permission
+      const { id, parentId, permissionType, permName, perms, routerName } = permission
       const form = {
         id: id,
         parentId: parentId,
         permissionType: permissionType,
-        permissionName: permissionName,
-        icon: icon,
+        permName: permName,
         perms: perms,
-        method: method,
-        orderNum: orderNum,
-        url: url,
-        remark: remark
+        routerName: routerName
       }
       updatePermission(form).then(response => {
         const { data } = response

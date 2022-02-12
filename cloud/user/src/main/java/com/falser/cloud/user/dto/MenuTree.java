@@ -18,6 +18,9 @@ public class MenuTree {
     @ApiModelProperty("id")
     private Long id;
 
+    @ApiModelProperty("权限名")
+    private String permName;
+
     @ApiModelProperty("路由名")
     private String routerName;
 

@@ -14,14 +14,5 @@ import java.util.List;
  * @since 2022-01-29 00:51:06
  */
 public interface SysRolePermissionDao extends BaseMapper<SysRolePermission> {
-
-    /**
-     * 按照角色id和类型权限id列表
-     *
-     * @param roleId 角色id
-     * @param type   类型
-     * @return {@link List}<{@link Long}>
-     */
-    List<Long> permissionIdListByRoleIdAndType(@Param("roleId") Long roleId, @Param("type") String type);
 }
 

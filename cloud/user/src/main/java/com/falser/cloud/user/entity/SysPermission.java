@@ -26,6 +26,12 @@ public class SysPermission implements Serializable {
     private Long id;
 
     /**
+     * 权限名
+     */
+    @TableField("perm_name")
+    private String permName;
+
+    /**
      * 路由名称
      */
     @TableField("router_name")

@@ -4,6 +4,7 @@ import com.falser.cloud.common.enums.PermissionTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,6 +25,10 @@ public class PermissionAddVO {
     private PermissionTypeEnum permissionType;
 
     @ApiModelProperty("权限名")
+    @NotBlank(message = "权限名不能为空")
+    private String permName;
+
+    @ApiModelProperty("路由名")
     private String routerName;
 
     @ApiModelProperty("权限标识符")

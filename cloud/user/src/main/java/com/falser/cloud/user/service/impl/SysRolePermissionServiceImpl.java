@@ -44,8 +44,13 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionD
     }
 
     @Override
-    public List<Long> getPermissionIdsByRoleIdAndType(Long id, PermissionTypeEnum permissionTypeEnum) {
-        return baseMapper.permissionIdListByRoleIdAndType(id, permissionTypeEnum.name());
+    public List<Long> getPermissionIdsByRoleId(Long id) {
+        LambdaQueryWrapper<SysRolePermission> queryWrapper =
+                new LambdaQueryWrapper<SysRolePermission>().eq(SysRolePermission::getRoleId, id);
+        return baseMapper.selectList(queryWrapper)
+                .stream()
+                .map(SysRolePermission::getPermissionId)
+                .collect(Collectors.toList());
     }
 }
 
