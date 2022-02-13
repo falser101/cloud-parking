@@ -13,6 +13,7 @@ import com.falser.cloud.user.vo.LoginVO;
 import com.falser.cloud.user.vo.RegisterVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,7 +32,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(@Lazy AuthService authService) {
         this.authService = authService;
     }
 

@@ -6,6 +6,7 @@ import com.falser.cloud.user.dto.LoginSuccessDTO;
 import com.falser.cloud.user.entity.SysUser;
 import com.falser.cloud.user.vo.LoginVO;
 import com.falser.cloud.user.vo.RegisterVO;
+import com.falser.cloud.user.vo.SysUserInsertOrUpdateVO;
 
 /**
  * 用户信息(SysUser)表服务接口
@@ -14,5 +15,6 @@ import com.falser.cloud.user.vo.RegisterVO;
  * @since 2022-01-29 00:51:06
  */
 public interface SysUserService extends IService<SysUser> {
+    void addSystemUser(SysUserInsertOrUpdateVO vo);
 }
 

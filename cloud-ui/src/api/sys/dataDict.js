@@ -3,7 +3,7 @@ import request from '@/utils/request'
 /** 多级数据字典列表*/
 export function dictList(data) {
   return request({
-    url: '/user/api/sys/data-dict',
+    url: '/user/api/data-dict',
     method: 'get',
     params: data
   })
@@ -12,7 +12,7 @@ export function dictList(data) {
 /** 多级数据字典列表*/
 export function saveDict(data) {
   return request({
-    url: '/user/api/sys/data-dict',
+    url: '/user/api/data-dict',
     method: 'post',
     data
   })
@@ -21,7 +21,7 @@ export function saveDict(data) {
 /** 多级数据字典列表*/
 export function updateDict(data) {
   return request({
-    url: '/user/api/sys/data-dict',
+    url: '/user/api/data-dict',
     method: 'put',
     data
   })
@@ -34,7 +34,7 @@ export function updateDict(data) {
  */
 export function getById(id) {
   return request({
-    url: '/user/api/sys/data-dict/' + id,
+    url: '/user/api/data-dict/' + id,
     method: 'get'
   })
 }

@@ -11,12 +11,18 @@ import com.falser.cloud.common.enums.PermissionTypeEnum;
 import com.falser.cloud.user.dao.SysPermissionDao;
 import com.falser.cloud.user.dto.MenuTree;
 import com.falser.cloud.user.entity.SysPermission;
+import com.falser.cloud.user.entity.SysRole;
+import com.falser.cloud.user.entity.SysRolePermission;
 import com.falser.cloud.user.service.SysPermissionService;
+import com.falser.cloud.user.service.SysRolePermissionService;
+import com.falser.cloud.user.service.SysRoleService;
 import com.falser.cloud.user.vo.PermissionAddVO;
 import com.falser.cloud.user.vo.PermissionUpdateVO;
 import com.falser.cloud.user.vo.PermissionVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -33,6 +39,16 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionDao, SysPermission> implements SysPermissionService {
+
+    private final SysRoleService sysRoleService;
+
+    private final SysRolePermissionService sysRolePermissionService;
+
+    public SysPermissionServiceImpl(@Lazy SysRoleService sysRoleService,
+                                    @Lazy SysRolePermissionService sysRolePermissionService) {
+        this.sysRoleService = sysRoleService;
+        this.sysRolePermissionService = sysRolePermissionService;
+    }
 
     @Override
     public IPage<MenuTree> getPageByVo(PermissionVO vo) {
@@ -51,6 +67,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionDao, SysP
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addPermission(PermissionAddVO vo) {
         SysPermission sysPermission = new SysPermission();
         BeanUtils.copyProperties(vo, sysPermission);
@@ -58,6 +75,13 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionDao, SysP
         sysPermission.setCreateBy(userinfo.getUserInfo().getUsername());
         sysPermission.setPermissionType(vo.getPermissionType());
         save(sysPermission);
+        // 默认给超级管理员加上此权限
+        SysRole super_admin = sysRoleService.getOne(new LambdaQueryWrapper<SysRole>()
+                .eq(SysRole::getRoleKey, "super_admin"));
+        sysRolePermissionService.save(SysRolePermission.builder()
+                .roleId(super_admin.getId())
+                .permissionId(sysPermission.getId())
+                .build());
     }
 
     @Override

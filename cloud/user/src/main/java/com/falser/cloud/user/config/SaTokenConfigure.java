@@ -33,12 +33,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
     @Resource
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     /**
      * 注册拦截器
      *
@@ -50,19 +44,19 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         // 注册Sa-Token的路由拦截器，并排除登录接口或其他可匿名访问的接口地址 (与注解拦截器无关)
         registry.addInterceptor(new SaAnnotationInterceptor())
                 .excludePathPatterns(
-                        List.of("/**")
-//                        Arrays.asList("/api/auth/login",
-//                                "/api/auth/register",
-//                                "/doc.html",
-//                                "/swagger-ui.html",
-//                                "/favicon.ico",
-//                                "/**/*.html",
-//                                "/**/*.css",
-//                                "/**/*.js",
-//                                "/swagger-resources/**",
-//                                "/swagger-resources/**/**",
-//                                "/v2/api-docs",
-//                                "/v2/api-docs/**")
+//                        List.of("/**")
+                        Arrays.asList("/api/auth/login",
+                                "/api/auth/register",
+                                "/doc.html",
+                                "/swagger-ui.html",
+                                "/favicon.ico",
+                                "/**/*.html",
+                                "/**/*.css",
+                                "/**/*.js",
+                                "/swagger-resources/**",
+                                "/swagger-resources/**/**",
+                                "/v2/api-docs",
+                                "/v2/api-docs/**")
                 )
                 .addPathPatterns("/**");
     }

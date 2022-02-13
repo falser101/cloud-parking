@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-form ref="form" :inline="true" :model="form" label-width="120px">
       <el-form-item label="角色名">
-        <el-input v-model="form.roleName"/>
+        <el-input v-model="form.roleName" />
       </el-form-item>
       <el-form-item label="角色KEY">
-        <el-input v-model="form.roleKey"/>
+        <el-input v-model="form.roleKey" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -67,23 +67,23 @@
           </el-button>
           <el-button
             v-if="scope.row.roleKey!=='super_admin'"
+            v-has-permi="['system:role:update']"
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-has-permi="['system:role:update']"
             @click="handleUpdate(scope.row)"
           >修改
           </el-button>
           <el-popconfirm
-            @confirm="handleDelete(scope.row)"
             v-if="scope.row.roleKey!=='super_admin'"
             title="确定删除吗？"
+            @confirm="handleDelete(scope.row)"
           >
             <el-button
               slot="reference"
+              v-has-permi="['system:role:remove']"
               size="mini"
               type="text"
-              v-has-permi="['system:role:remove']"
               icon="el-icon-delete"
             >删除
             </el-button>
@@ -95,50 +95,37 @@
       </div>
     </el-table>
     <!-- 添加或修改菜单对话框 -->
-    <el-dialog :title="title" @close="form1.parentId=''" :visible.sync="open" width="680px" append-to-body>
-      <el-form v-loading="dialogLoading" ref="form1" :model="form1" :rules="rules" label-width="100px">
+    <el-dialog :title="title" :visible.sync="open" width="680px" append-to-body @close="form1.parentId=''">
+      <el-form ref="form1" v-loading="dialogLoading" :model="form1" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="角色名" prop="roleName">
-              <el-input :disabled="isView" v-model="form1.roleName" placeholder="请输入角色名"/>
+              <el-input v-model="form1.roleName" :disabled="isView" placeholder="请输入角色名" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色KEY" prop="roleKey">
-              <el-input :disabled="isView" v-model="form1.roleKey" placeholder="请输入角色KEY"/>
+              <el-input v-model="form1.roleKey" :disabled="isView" placeholder="请输入角色KEY" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="菜单权限">
               <el-tree
-                :readonly="isView"
                 ref="menu"
+                :readonly="isView"
                 :data="menuList"
                 show-checkbox
+                :check-strictly="true"
                 node-key="id"
-                :default-checked-keys="form1.menuList"
+                :default-checked-keys="form1.permList"
                 :props="defaultProps"
-              >
-              </el-tree>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="接口权限">
-              <el-tree
-                :readonly="isView"
-                ref="interface"
-                :data="interfaceList"
-                show-checkbox
-                node-key="id"
-                :default-checked-keys="form1.interfaceList"
-                :props="defaultProps"
-              >
-              </el-tree>
+                @check="checkChange"
+              />
             </el-form-item>
           </el-col>
           <el-col v-if="!isView" :sapn="24">
             <el-form-item>
-              <el-button type="primary" @click="handleSubmit">确定</el-button>
+              <el-button type="primary" v-has-permi="['system:role:add', 'system:role:update']" @click="handleSubmit">确定</el-button>
               <el-button @click="open = false">取消</el-button>
             </el-form-item>
           </el-col>
@@ -182,7 +169,7 @@ export default {
       menuList: [],
       defaultProps: {
         children: 'children',
-        label: 'permissionName'
+        label: 'permName'
       },
       // 表单校验
       rules: {
@@ -209,7 +196,15 @@ export default {
     this.fetchData()
   },
   methods: {
-    // 页码切换
+    /**
+     * 节点
+     */
+    checkChange(data, node) {
+      console.log(node)
+    },
+    /**
+     * 页码切换
+     */
     currentChange(current) {
       this.form.current = current
       this.fetchData()
@@ -267,21 +262,11 @@ export default {
     },
     loadRole() {
       this.$store.dispatch('permission/getPermissionList', {
-        permissionType: 'MENU',
         current: 0,
         size: 1000
       }).then(data => {
         const { records } = data
         this.menuList = records
-      })
-
-      this.$store.dispatch('permission/getPermissionList', {
-        permissionType: 'INTERFACE',
-        current: 0,
-        size: 1000
-      }).then(data => {
-        const { records } = data
-        this.interfaceList = records
       })
       this.dialogLoading = false
     },
@@ -290,8 +275,7 @@ export default {
         id: this.form1.id,
         roleName: this.form1.roleName,
         roleKey: this.form1.roleKey,
-        menuList: this.$refs.menu.getCheckedKeys(),
-        interfaceList: this.$refs.interface.getCheckedKeys()
+        menuList: this.$refs.menu.getCheckedKeys()
       }
       if (this.isAdd) {
         this.$store.dispatch('role/addRole', reqForm).then(() => {

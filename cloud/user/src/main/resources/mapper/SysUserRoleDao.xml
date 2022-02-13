@@ -8,5 +8,12 @@
                  LEFT JOIN `sys_role_permission` t2 ON t2.permission_id = t1.id
         WHERE t2.role_id = #{roleId}
     </select>
+
+    <select id="selectRoleByUserId" resultType="com.falser.cloud.user.entity.SysRole">
+        SELECT *
+        FROM 'sys_role' t1
+            LEFT JOIN 'sys_user_role' t2 on t2.role_id = t1.id
+        WHERE t2.user_id = #{userId}
+    </select>
 </mapper>
 

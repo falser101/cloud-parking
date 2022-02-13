@@ -13,6 +13,7 @@ import com.falser.cloud.user.service.SysRoleService;
 import com.falser.cloud.user.vo.RoleAddVO;
 import com.falser.cloud.user.vo.RoleDetailVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
 
     private final SysRolePermissionService sysRolePermissionService;
 
-    public SysRoleServiceImpl(SysRolePermissionService sysRolePermissionService) {
+    public SysRoleServiceImpl(@Lazy SysRolePermissionService sysRolePermissionService) {
         this.sysRolePermissionService = sysRolePermissionService;
     }
     @Override
@@ -48,18 +49,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     @Transactional(rollbackFor = Exception.class)
     public void updateRole(RoleDetailVO vo) {
         SysRole entity = new SysRole();
-        BeanUtils.copyProperties(vo, entity, "interfaceList", "menuList");
+        BeanUtils.copyProperties(vo, entity,"menuList");
         updateById(entity);
         sysRolePermissionService.remove(new LambdaUpdateWrapper<SysRolePermission>().eq(SysRolePermission::getRoleId, vo.getId()));
-        List<SysRolePermission> sysRolePermissions = getRolePermissions(vo.getInterfaceList(), vo.getMenuList(), vo.getId());
+        List<SysRolePermission> sysRolePermissions = getRolePermissions(vo.getMenuList(), vo.getId());
         sysRolePermissionService.saveBatch(sysRolePermissions);
     }
 
-    private List<SysRolePermission> getRolePermissions(List<Long> interfaceList, List<Long> menuList, Long vo2) {
-        interfaceList.addAll(menuList);
-        return interfaceList.stream().map(id -> {
+    private List<SysRolePermission> getRolePermissions(List<Long> menuList, Long roleId) {
+        return menuList.stream().map(id -> {
             SysRolePermission sysRolePermission = new SysRolePermission();
-            sysRolePermission.setRoleId(vo2);
+            sysRolePermission.setRoleId(roleId);
             sysRolePermission.setPermissionId(id);
             return sysRolePermission;
         }).collect(Collectors.toList());
@@ -69,9 +69,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     @Transactional(rollbackFor = Exception.class)
     public void addRole(RoleAddVO vo) {
         SysRole entity = new SysRole();
-        BeanUtils.copyProperties(vo, entity, "interfaceList", "menuList");
+        BeanUtils.copyProperties(vo, entity, "menuList");
         save(entity);
-        List<SysRolePermission> sysRolePermissions = getRolePermissions(List.of(), vo.getMenuList(), entity.getId());
+        List<SysRolePermission> sysRolePermissions = getRolePermissions(vo.getMenuList(), entity.getId());
         sysRolePermissionService.saveBatch(sysRolePermissions);
     }
 

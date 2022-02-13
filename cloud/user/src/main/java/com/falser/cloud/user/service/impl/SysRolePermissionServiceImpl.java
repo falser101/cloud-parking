@@ -8,6 +8,7 @@ import com.falser.cloud.user.entity.SysPermission;
 import com.falser.cloud.user.entity.SysRolePermission;
 import com.falser.cloud.user.service.SysPermissionService;
 import com.falser.cloud.user.service.SysRolePermissionService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -27,7 +28,7 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionD
 
     private final SysPermissionService sysPermissionService;
 
-    public SysRolePermissionServiceImpl(SysPermissionService sysPermissionService) {
+    public SysRolePermissionServiceImpl(@Lazy SysPermissionService sysPermissionService) {
         this.sysPermissionService = sysPermissionService;
     }
 

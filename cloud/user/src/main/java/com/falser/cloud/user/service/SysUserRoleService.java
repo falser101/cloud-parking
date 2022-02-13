@@ -21,5 +21,13 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      * @return {@link List}<{@link SysRole}>
      */
     List<SysPermission> getPermissionListByUserId(Long userId);
+
+    /**
+     * 被用户id角色
+     *
+     * @param userId 用户id
+     * @return {@link SysRole}
+     */
+    SysRole getRoleByUserId(Long userId);
 }
 

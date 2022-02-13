@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column label="用户名">
         <template slot-scope="scope">
-          {{ scope.row.userName }}
+          {{ scope.row.username }}
         </template>
       </el-table-column>
       <el-table-column label="登录名" align="center">

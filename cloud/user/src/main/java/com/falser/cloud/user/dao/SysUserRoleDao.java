@@ -2,6 +2,7 @@ package com.falser.cloud.user.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.falser.cloud.user.entity.SysPermission;
+import com.falser.cloud.user.entity.SysRole;
 import com.falser.cloud.user.entity.SysUserRole;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +16,7 @@ import java.util.List;
  */
 public interface SysUserRoleDao extends BaseMapper<SysUserRole> {
     List<SysPermission> getPermissionListByUserId(Long roleId);
+
+    SysRole selectRoleByUserId(Long userId);
 }
 

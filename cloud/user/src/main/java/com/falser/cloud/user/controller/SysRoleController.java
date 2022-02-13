@@ -1,6 +1,7 @@
 package com.falser.cloud.user.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,11 +12,10 @@ import com.falser.cloud.user.service.SysRoleService;
 import com.falser.cloud.user.vo.RoleAddVO;
 import com.falser.cloud.user.vo.RoleDetailVO;
 import io.swagger.annotations.Api;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,35 +28,41 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/role")
 public class SysRoleController {
-    /**
-     * 服务对象
-     */
-    @Resource
-    private SysRoleService sysRoleService;
+
+    private final SysRoleService sysRoleService;
+
+    public SysRoleController(@Lazy SysRoleService sysRoleService) {
+        this.sysRoleService = sysRoleService;
+    }
 
     @GetMapping
+    @SaCheckPermission(value = "system:role:list", orRole = {"super_admin"})
     public ApiResponse<IPage<SysRole>> selectAll(Page<SysRole> page, SysRole sysRole) {
         return ApiResponse.ofSuccess(this.sysRoleService.page(page, new QueryWrapper<>(sysRole)));
     }
 
     @GetMapping("{id}")
+    @SaCheckPermission(value = "system:role:detail", orRole = {"super_admin"})
     public ApiResponse<RoleDetailDTO> selectOne(@PathVariable Long id) {
         return ApiResponse.ofSuccess(this.sysRoleService.getRoleDetailById(id));
     }
 
     @PostMapping
+    @SaCheckPermission(value = "system:role:add", orRole = {"super_admin"})
     public ApiResponse<String> insert(@Valid @RequestBody RoleAddVO vo) {
         this.sysRoleService.addRole(vo);
         return ApiResponse.ofSuccess();
     }
 
     @PutMapping
+    @SaCheckPermission(value = "system:role:update", orRole = {"super_admin"})
     public ApiResponse<String> update(@Valid @RequestBody RoleDetailVO vo) {
         this.sysRoleService.updateRole(vo);
         return ApiResponse.ofSuccess();
     }
 
     @DeleteMapping
+    @SaCheckPermission(value = "system:role:delete", orRole = {"super_admin"})
     public ApiResponse<Boolean> delete(@RequestParam("idList") List<Long> idList) {
         return ApiResponse.ofSuccess(this.sysRoleService.removeByIds(idList));
     }

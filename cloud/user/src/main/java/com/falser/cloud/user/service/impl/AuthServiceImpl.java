@@ -22,6 +22,7 @@ import com.falser.cloud.user.service.SysUserService;
 import com.falser.cloud.user.vo.LoginVO;
 import com.falser.cloud.user.vo.RegisterVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -47,7 +48,10 @@ public class AuthServiceImpl implements AuthService {
 
     private final SysRoleService sysRoleService;
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder, SysUserService sysUserService, SysUserRoleService sysUserRoleService, SysRoleService sysRoleService) {
+    public AuthServiceImpl(@Lazy PasswordEncoder passwordEncoder,
+                           @Lazy SysUserService sysUserService,
+                           @Lazy SysUserRoleService sysUserRoleService,
+                           @Lazy SysRoleService sysRoleService) {
         this.passwordEncoder = passwordEncoder;
         this.sysUserService = sysUserService;
         this.sysUserRoleService = sysUserRoleService;

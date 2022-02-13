@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: parking
+  profiles:
+    active: dev
+  rabbitmq:
+    password: 0000520+
+    host: 162.14.102.130
+    port: 5672
+    username: dev
+    virtual-host: dev
+server:
+  port: 6000
+
+mq:
+  order:
+    trade:
+      status:
+        exchange: order.trade.status
+        routeKey: order.trade.status.#
+        queue: order.trade.status.queue
+  host: 162.14.102.130
+  virtualhost: dev
+  port: 5672
+  username: dev
+  password: 0000520+
+  concurrency: 1
+alipay:
+  config:
+    appid: 1
+    rsa_private_key: 1
+    notify_url: 1
+    return_url: 1
+    gateway_url: 1
+    charset: utf-8
+    format: 1
+    alipay_public_key: 1
+    signtype: 1
