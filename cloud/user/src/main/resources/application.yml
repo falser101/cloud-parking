@@ -3,6 +3,7 @@ spring:
     name: user
   profiles:
     active: dev
+  datasource:
   redis:
     host: r-2vcejjs6xman4kgqenpd.redis.cn-chengdu.rds.aliyuncs.com
     port: 6379

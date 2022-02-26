@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: message
+  profiles:
+    active: dev
+server:
+  port: 6666
+mq:
+  host: 162.14.102.130
+  virtualhost: dev
+  port: 5672
+  username: dev
+  password: 0000520+
+  concurrency: 1
+  message:
+    cycle:
+      routeKey: mq.message.cycle.#
+      exchange: mq.message.cycle
+      queue: mq.message.cycle.queue
